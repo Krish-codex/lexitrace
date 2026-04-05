@@ -14,7 +14,6 @@ public class WordDAO {
         conn = DatabaseManager.getConnection();
     }
 
-    // INSERT WORD
     public int insertWord(Word word) throws SQLException {
 
         String sql = "INSERT INTO vocabulary (word, translation, language_pair) VALUES (?, ?, ?)";
@@ -33,15 +32,42 @@ public class WordDAO {
         return -1;
     }
 
-    // GET ALL WORDS
     public List<Word> getAllWords() throws SQLException {
 
         List<Word> list = new ArrayList<>();
-
         String sql = "SELECT * FROM vocabulary";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Word w = new Word(
+                        rs.getInt("id"),
+                        rs.getString("word"),
+                        rs.getString("translation"),
+                        rs.getString("language_pair")
+                );
+                list.add(w);
+            }
+        }
+        return list;
+    }
+
+    public List<Word> getAllWordsForUser(int userId) throws SQLException {
+
+        List<Word> list = new ArrayList<>();
+
+        String sql = """
+            SELECT v.*
+            FROM vocabulary v
+            JOIN progress p ON v.id = p.word_id
+            WHERE p.user_id = ?
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

@@ -20,37 +20,33 @@ public class MainApp extends Application {
             ProgressDAO progressDAO = new ProgressDAO();
             UserDAO userDAO = new UserDAO();
 
-            // Register user (INSERT IGNORE handles duplicate safely)
             userDAO.register("test", "1234");
             User user = userDAO.login("test", "1234");
 
             if (user == null) {
-                System.out.println("Login failed — check credentials.");
+                System.out.println("login failed");
             } else {
-                System.out.println("Logged in as: " + user.getUsername());
+                System.out.println("logged in: " + user.getUsername());
 
-                // Get all vocabulary words
-                var words = wordDAO.getAllWords();
-
-                for (var w : words) {
-                    // Init progress (safe — INSERT IGNORE skips duplicates)
+                var allWords = wordDAO.getAllWords();
+                for (var w : allWords) {
                     progressDAO.initProgress(user.getId(), w.getId());
+                }
 
-                    // Simulate correct answer
-                    progressDAO.updateProgress(user.getId(), w.getId(), true);
-
-                    System.out.println("Processed: " + w.getWord());
+                var userWords = wordDAO.getAllWordsForUser(user.getId());
+                for (var w : userWords) {
+                    progressDAO.updateProgress(user.getId(), w.getId(), 1, 1, 0);
+                    System.out.println("done: " + w.getWord());
                 }
             }
 
         } catch (Exception e) {
-            System.out.println("ERROR: " + e.getMessage());
+            System.out.println("error: " + e.getMessage());
             e.printStackTrace();
         }
 
-        Label label = new Label("LexiTrace Running ✅");
+        Label label = new Label("LexiTrace");
         Scene scene = new Scene(new StackPane(label), 800, 600);
-
         stage.setScene(scene);
         stage.setTitle("LexiTrace");
         stage.show();

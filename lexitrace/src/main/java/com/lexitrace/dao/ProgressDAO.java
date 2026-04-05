@@ -10,10 +10,9 @@ public class ProgressDAO {
         conn = DatabaseManager.getConnection();
     }
 
-    // INIT PROGRESS (safe — won't duplicate)
     public void initProgress(int userId, int wordId) throws SQLException {
 
-        String sql = "INSERT IGNORE INTO progress (user_id, word_id) VALUES (?, ?)";
+        String sql = "INSERT IGNORE INTO progress (user_id, word_id, next_review_at) VALUES (?, ?, NOW())";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -22,26 +21,24 @@ public class ProgressDAO {
         }
     }
 
-    // UPDATE PROGRESS AFTER QUIZ
-    public void updateProgress(int userId, int wordId, boolean correct) throws SQLException {
+    public void updateProgress(int userId, int wordId, int masteryLevel,
+                               int correctCount, int incorrectCount) throws SQLException {
 
-        String sqlCorrect = """
+        String sql = """
             UPDATE progress
-            SET mastery_level = mastery_level + 1,
-                correct_count = correct_count + 1
+            SET mastery_level = ?,
+                correct_count = ?,
+                incorrect_count = ?,
+                last_reviewed_at = NOW()
             WHERE user_id = ? AND word_id = ?
         """;
 
-        String sqlWrong = """
-            UPDATE progress
-            SET mastery_level = GREATEST(mastery_level - 1, 0),
-                incorrect_count = incorrect_count + 1
-            WHERE user_id = ? AND word_id = ?
-        """;
-
-        try (PreparedStatement ps = conn.prepareStatement(correct ? sqlCorrect : sqlWrong)) {
-            ps.setInt(1, userId);
-            ps.setInt(2, wordId);
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, masteryLevel);
+            ps.setInt(2, correctCount);
+            ps.setInt(3, incorrectCount);
+            ps.setInt(4, userId);
+            ps.setInt(5, wordId);
             ps.executeUpdate();
         }
     }
