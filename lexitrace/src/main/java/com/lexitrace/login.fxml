@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!--
+    login.fxml — LexiTrace Login Screen
+    fx:controller wired to LoginController.java
+    fx:ids used: usernameField, passwordField, messageLabel
+    Designer: Mridul (UI Lead)
+-->
+<StackPane
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.lexitrace.controller.LoginController"
+    styleClass="login-pane"
+    stylesheets="@styles.css"
+    prefWidth="900" prefHeight="620">
+
+    <!-- ── Dark background ──────────────────────────────── -->
+    <VBox alignment="CENTER" styleClass="login-pane">
+
+        <!-- Subtle top gradient bar -->
+        <Region styleClass="accent-line" prefHeight="2" maxWidth="Infinity"/>
+
+        <!-- Main centered content -->
+        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+            <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+
+            <!-- Login Card -->
+            <VBox styleClass="login-card" alignment="CENTER_LEFT" spacing="0">
+                <maxWidth>420</maxWidth>
+                <minWidth>380</minWidth>
+
+                <!-- Logo / Branding -->
+                <VBox alignment="CENTER" spacing="6">
+                    <padding><Insets bottom="32"/></padding>
+
+                    <!-- Icon placeholder (styled box) -->
+                    <StackPane prefWidth="52" prefHeight="52" alignment="CENTER">
+                        <VBox styleClass="card-elevated" alignment="CENTER"
+                              prefWidth="52" prefHeight="52">
+                            <Label text="⬡"
+                                   style="-fx-font-size: 22px; -fx-text-fill: #4f9cf9;"/>
+                        </VBox>
+                    </StackPane>
+
+                    <Label text="LexiTrace" styleClass="app-title"
+                           style="-fx-font-size: 28px;"/>
+                    <Label text="ADAPTIVE LANGUAGE LEARNING"
+                           styleClass="app-subtitle"/>
+                </VBox>
+
+                <!-- Decorative divider -->
+                <Region styleClass="accent-line" prefHeight="1.5" maxWidth="Infinity"
+                        style="-fx-opacity: 0.5;">
+                    <VBox.margin><Insets top="0" bottom="28"/></VBox.margin>
+                </Region>
+
+                <!-- Welcome text -->
+                <Label text="Welcome back"
+                       style="-fx-font-family: 'Outfit', 'Segoe UI', sans-serif;
+                              -fx-font-size: 18px; -fx-font-weight: 600;
+                              -fx-text-fill: #e8ecf4;">
+                    <VBox.margin><Insets bottom="4"/></VBox.margin>
+                </Label>
+                <Label text="Sign in to continue your learning journey"
+                       styleClass="muted-text">
+                    <VBox.margin><Insets bottom="24"/></VBox.margin>
+                </Label>
+
+                <!-- Username field -->
+                <Label text="USERNAME" styleClass="input-label"/>
+                <TextField fx:id="usernameField"
+                           styleClass="input-field"
+                           promptText="Enter your username"
+                           maxWidth="Infinity">
+                    <VBox.margin><Insets top="4" bottom="16"/></VBox.margin>
+                </TextField>
+
+                <!-- Password field -->
+                <Label text="PASSWORD" styleClass="input-label"/>
+                <PasswordField fx:id="passwordField"
+                               styleClass="input-field"
+                               promptText="Enter your password"
+                               maxWidth="Infinity"
+                               onAction="#onLogin">
+                    <VBox.margin><Insets top="4" bottom="8"/></VBox.margin>
+                </PasswordField>
+
+                <!-- Error / message label — hidden by default -->
+                <Label fx:id="messageLabel"
+                       styleClass="message-error"
+                       text=""
+                       visible="false"
+                       wrapText="true"
+                       maxWidth="Infinity">
+                    <VBox.margin><Insets top="4" bottom="4"/></VBox.margin>
+                </Label>
+
+                <!-- Login button -->
+                <Button text="Sign In →"
+                        styleClass="btn-primary"
+                        maxWidth="Infinity"
+                        prefHeight="46"
+                        onAction="#onLogin"
+                        defaultButton="true">
+                    <VBox.margin><Insets top="12"/></VBox.margin>
+                </Button>
+
+                <!-- Footer hint -->
+                <Label text="Press Enter or click Sign In to continue"
+                       styleClass="muted-text"
+                       style="-fx-font-size: 11px;"
+                       alignment="CENTER"
+                       maxWidth="Infinity">
+                    <VBox.margin><Insets top="14"/></VBox.margin>
+                </Label>
+
+            </VBox><!-- /login-card -->
+
+        </VBox><!-- /center VBox -->
+
+        <!-- Bottom accent line -->
+        <Region styleClass="accent-line" prefHeight="2" maxWidth="Infinity"
+                style="-fx-opacity: 0.4;"/>
+
+    </VBox>
+
+</StackPane>

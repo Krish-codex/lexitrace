@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!--
+    quiz.fxml — LexiTrace Quiz Screen
+    fx:controller wired to QuizController.java
+    fx:ids used: wordLabel, partOfSpeechLabel, masteryLabel,
+                 progressLabel, answerField, submitButton,
+                 feedbackLabel, exampleLabel, nextButton, backButton
+    Designer: Mridul (UI Lead)
+-->
+<BorderPane
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.lexitrace.controller.QuizController"
+    styleClass="screen-root"
+    stylesheets="@styles.css"
+    prefWidth="960" prefHeight="660">
+
+    <!-- ════════════════════════════════════════════════════
+         TOP — Navigation Bar
+    ════════════════════════════════════════════════════ -->
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="0">
+            <HBox alignment="CENTER_LEFT" spacing="2">
+                <Label text="Lexi" styleClass="navbar-brand"/>
+                <Label text="Trace" styleClass="navbar-brand-accent"/>
+            </HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox alignment="CENTER" spacing="4">
+                <padding><Insets right="16"/></padding>
+                <Button text="← Back to Dashboard"
+                        styleClass="btn-ghost"
+                        fx:id="backButton"
+                        onAction="#onBack"/>
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- ════════════════════════════════════════════════════
+         CENTER — Quiz Body
+    ════════════════════════════════════════════════════ -->
+    <center>
+        <VBox alignment="CENTER" spacing="0"
+              style="-fx-background-color: #0d0f14;">
+            <padding><Insets top="40" right="96" bottom="48" left="96"/></padding>
+
+            <!-- Screen title + progress -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="QUIZ SESSION" styleClass="label-tag"/>
+                    <Label text="Translate the word"
+                           style="-fx-font-family: 'Outfit','Segoe UI',sans-serif;
+                                  -fx-font-size: 20px; -fx-font-weight: 700;
+                                  -fx-text-fill: #e8ecf4;"/>
+                </VBox>
+                <Label fx:id="progressLabel"
+                       text="— / —"
+                       styleClass="badge-blue"
+                       style="-fx-font-size: 13px; -fx-font-weight: 700;
+                              -fx-padding: 6 16;"/>
+            </HBox>
+
+            <!-- Accent divider -->
+            <Region styleClass="accent-line" prefHeight="1.5" maxWidth="Infinity"
+                    style="-fx-opacity: 0.5;">
+                <VBox.margin><Insets top="14" bottom="28"/></VBox.margin>
+            </Region>
+
+            <!-- ── Word Card ───────────────────────────── -->
+            <VBox styleClass="quiz-word-card" alignment="CENTER" spacing="16">
+                <maxWidth>560</maxWidth>
+                <minWidth>400</minWidth>
+
+                <!-- Mastery badge -->
+                <HBox alignment="CENTER">
+                    <Label fx:id="masteryLabel"
+                           text="New"
+                           styleClass="mastery-badge mastery-new"/>
+                </HBox>
+
+                <!-- The word to translate -->
+                <Label fx:id="wordLabel"
+                       text="—"
+                       styleClass="quiz-word-label"
+                       alignment="CENTER"
+                       maxWidth="Infinity"/>
+
+                <!-- Part of speech (optional info) -->
+                <Label fx:id="partOfSpeechLabel"
+                       text=""
+                       styleClass="muted-text"
+                       style="-fx-font-size: 12px; -fx-font-style: italic;"
+                       alignment="CENTER"
+                       maxWidth="Infinity"/>
+
+            </VBox>
+
+            <!-- ── Answer section ─────────────────────── -->
+            <VBox spacing="12" maxWidth="480" minWidth="360" alignment="CENTER">
+                <VBox.margin><Insets top="24"/></VBox.margin>
+
+                <Label text="YOUR ANSWER" styleClass="input-label"
+                       maxWidth="Infinity"/>
+
+                <TextField fx:id="answerField"
+                           styleClass="input-field"
+                           promptText="Type translation here…"
+                           maxWidth="Infinity"
+                           prefHeight="50"
+                           style="-fx-font-size: 16px;"
+                           onAction="#onSubmit"/>
+
+                <!-- Submit button -->
+                <Button fx:id="submitButton"
+                        text="Check Answer →"
+                        styleClass="btn-primary"
+                        maxWidth="Infinity"
+                        prefHeight="48"
+                        onAction="#onSubmit"
+                        defaultButton="true">
+                    <VBox.margin><Insets top="4"/></VBox.margin>
+                </Button>
+
+                <!-- Feedback label — hidden initially -->
+                <Label fx:id="feedbackLabel"
+                       text=""
+                       styleClass="feedback-correct"
+                       visible="false"
+                       wrapText="true"
+                       maxWidth="Infinity"
+                       alignment="CENTER">
+                    <VBox.margin><Insets top="4"/></VBox.margin>
+                </Label>
+
+                <!-- Example sentence — shown after answer -->
+                <Label fx:id="exampleLabel"
+                       text=""
+                       styleClass="example-label"
+                       visible="false"
+                       wrapText="true"
+                       maxWidth="Infinity"
+                       alignment="CENTER">
+                    <VBox.margin><Insets top="2"/></VBox.margin>
+                </Label>
+
+                <!-- Next word button — hidden until feedback shown -->
+                <Button fx:id="nextButton"
+                        text="Next Word →"
+                        styleClass="btn-success"
+                        maxWidth="Infinity"
+                        prefHeight="46"
+                        visible="false"
+                        onAction="#onNext">
+                    <VBox.margin><Insets top="4"/></VBox.margin>
+                </Button>
+
+            </VBox><!-- /answer section -->
+
+        </VBox>
+    </center>
+
+</BorderPane>
