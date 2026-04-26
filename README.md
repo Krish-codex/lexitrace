@@ -4,7 +4,6 @@ LexiTrace is a premium, full-stack language learning ecosystem built with **Spri
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/)
-[![License](https://img.shields.io/badge/License-MIT-orange)](LICENSE)
 
 ---
 
@@ -106,6 +105,3 @@ LexiTrace/
 ```
 
 ---
-
-## 📜 License
-Distributed under the **MIT License**. See `LICENSE` for more information.
