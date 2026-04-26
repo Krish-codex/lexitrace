@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card" style="text-align:center;">
+        <div class="auth-logo">
+            <h1>🌐 LexiTrace</h1>
+        </div>
+        <div style="font-size:4rem;margin-bottom:16px;">⚠️</div>
+        <h2>Something went wrong</h2>
+        <p class="text-muted" style="margin:16px 0;" th:text="${error ?: 'An unexpected error occurred'}">Error</p>
+        <p class="text-muted" th:if="${message}" th:text="${message}"></p>
+        <div style="margin-top:24px;">
+            <a href="/login" class="btn btn-primary">Go to Login</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Lesson Content — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .lesson-content-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .lesson-content-box h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+            color: var(--accent-light);
+        }
+        .lesson-content-box p {
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: user-sidebar}"></div>
+    <div class="main-content">
+        <div class="page-header">
+            <h1><span th:text="${language?.flagEmoji}">🏳</span> <span th:text="${lesson.title}">Lesson Title</span></h1>
+            <p>Study this material before starting the exercises</p>
+        </div>
+
+        <div class="lesson-content-box" th:utext="${lesson.content}">
+            <!-- HTML content injected here from database -->
+            <h2>Placeholder Title</h2>
+            <p>Placeholder content for the lesson.</p>
+        </div>
+
+        <div class="flex-between">
+            <a th:href="@{/user/lessons/{id}(id=${language.id})}" class="btn btn-outline">← Back to Lessons</a>
+            <a th:href="@{/user/exercise/{id}(id=${lesson.id})}" class="btn btn-primary btn-lg">Start Exercises →</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

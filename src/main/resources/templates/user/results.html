@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Results — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: user-sidebar}"></div>
+    <div class="main-content">
+        <div class="exercise-container">
+            <div class="card text-center mb-24" style="padding:40px;">
+                <h1 style="margin-bottom:8px;">🎉 Lesson Complete!</h1>
+                <p class="text-muted" th:text="${lesson.title}">Lesson</p>
+                <div class="result-score" th:text="${totalScore}" style="margin:20px 0;">0</div>
+                <p>XP Earned</p>
+                <div style="display:flex;justify-content:center;gap:32px;margin-top:24px;">
+                    <div>
+                        <div style="font-size:1.5rem;font-weight:700;" th:text="${correctCount} + '/' + ${totalExercises}">0/0</div>
+                        <div class="text-muted">Correct</div>
+                    </div>
+                    <div>
+                        <div style="font-size:1.5rem;font-weight:700;" th:text="${#numbers.formatDecimal(correctCount * 100.0 / totalExercises, 0, 0)} + '%'">0%</div>
+                        <div class="text-muted">Accuracy</div>
+                    </div>
+                    <div>
+                        <div style="font-size:1.5rem;font-weight:700;">
+                            <span th:text="${timeSpent / 60}">0</span>m <span th:text="${timeSpent % 60}">0</span>s
+                        </div>
+                        <div class="text-muted">Time</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom:16px;">📋 Detailed Results</h3>
+            <div th:each="r : ${results}" class="exercise-card" th:classappend="${r['isCorrect']} ? 'result-correct' : 'result-wrong'">
+                <div class="exercise-question" th:text="${r['question']}">Q</div>
+                <div style="margin-top:12px;">
+                    <div><strong>Your answer:</strong> <span th:text="${r['userAnswer']}" th:style="${r['isCorrect']} ? 'color:var(--success)' : 'color:var(--danger)'">-</span></div>
+                    <div th:unless="${r['isCorrect']}"><strong>Correct:</strong> <span th:text="${r['correctAnswer']}" style="color:var(--success)">-</span></div>
+                    <span th:if="${r['isCorrect']}" class="badge badge-success" style="margin-top:8px;">✓ Correct (+<span th:text="${r['points']}">10</span> XP)</span>
+                    <span th:unless="${r['isCorrect']}" class="badge badge-danger" style="margin-top:8px;">✗ Wrong</span>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:12px;margin-top:24px;">
+                <a th:href="@{/user/lessons/{id}(id=${language?.id})}" class="btn btn-outline">← Back to Lessons</a>
+                <a th:href="@{/user/dashboard}" class="btn btn-primary">Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

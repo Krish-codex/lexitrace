@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Exercises — Admin — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: admin-sidebar}"></div>
+    <div class="main-content">
+        <div class="page-header">
+            <h1>✏️ Exercises — <span th:text="${lesson?.title}">Lesson</span></h1>
+            <p th:if="${language != null}" th:text="${language.flagEmoji + ' ' + language.name}">Language</p>
+        </div>
+
+        <!-- Add Exercise -->
+        <div class="card mb-24">
+            <h3 style="margin-bottom:16px;">Add Exercise</h3>
+            <form th:action="@{/admin/exercises/add}" method="post">
+                <input type="hidden" name="lessonId" th:value="${lesson?.id}">
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <div class="form-group" style="width:150px;"><label>Type</label>
+                        <select name="type" class="form-control"><option>MCQ</option><option>FILL_BLANK</option><option>MATCHING</option><option>TRANSLATION</option></select>
+                    </div>
+                    <div class="form-group" style="width:80px;"><label>Points</label><input type="number" name="points" class="form-control" value="10" required></div>
+                </div>
+                <div class="form-group"><label>Question</label><input type="text" name="question" class="form-control" required></div>
+                <div class="form-group"><label>Correct Answer</label><input type="text" name="correctAnswer" class="form-control" required></div>
+                <div class="form-group"><label>Options (JSON array for MCQ, e.g. ["A","B","C","D"])</label><input type="text" name="options" class="form-control" placeholder='["Option1","Option2","Option3","Option4"]'></div>
+                <button type="submit" class="btn btn-primary">Add Exercise</button>
+            </form>
+        </div>
+
+        <!-- Exercises Table -->
+        <div class="table-container">
+            <table>
+                <thead><tr><th>ID</th><th>Type</th><th>Question</th><th>Answer</th><th>Points</th><th>Actions</th></tr></thead>
+                <tbody>
+                    <tr th:each="e : ${exercises}">
+                        <td th:text="${e.id}">1</td>
+                        <td><span class="badge badge-info" th:text="${e.type}">MCQ</span></td>
+                        <td th:text="${e.question}">Q</td>
+                        <td th:text="${e.correctAnswer}">A</td>
+                        <td th:text="${e.points}">10</td>
+                        <td>
+                            <form th:action="@{/admin/exercises/delete/{id}(id=${e.id})}" method="post" style="display:inline;">
+                                <input type="hidden" name="lessonId" th:value="${lesson?.id}">
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a th:href="@{/admin/lessons(languageId=${language?.id})}" class="btn btn-outline mt-16">← Back to Lessons</a>
+    </div>
+</div>
+</body>
+</html>

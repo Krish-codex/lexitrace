@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <h1>🌐 LexiTrace</h1>
+            <p>Your language learning journey starts here</p>
+        </div>
+        <h2>Sign In</h2>
+        <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+        <div class="alert alert-success" th:if="${param.logout}">Logged out successfully</div>
+        <div class="alert alert-success" th:if="${param.registered}">Registration successful! Please login.</div>
+        <div class="alert alert-success" th:if="${param.reset}">Password reset successful! Please login.</div>
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="username" class="form-control" placeholder="you@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Sign In</button>
+        </form>
+        <div style="text-align:center;margin-top:20px;">
+            <a th:href="@{/forgot-password}">Forgot password?</a>
+            <span style="margin:0 8px;color:var(--text-muted)">|</span>
+            <a th:href="@{/register}">Create account</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

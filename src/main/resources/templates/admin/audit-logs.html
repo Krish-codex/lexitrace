@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Audit Logs — Admin — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: admin-sidebar}"></div>
+    <div class="main-content">
+        <div class="page-header"><h1>📋 Audit Logs</h1><p>All admin actions</p></div>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>ID</th><th>Admin ID</th><th>Action</th><th>Target User</th><th>Timestamp</th></tr></thead>
+                <tbody>
+                    <tr th:each="log : ${logs}">
+                        <td th:text="${log.id}">1</td>
+                        <td th:text="${log.adminId}">1</td>
+                        <td th:text="${log.action}">Action</td>
+                        <td th:text="${log.targetUserId != null ? log.targetUserId : '-'}">-</td>
+                        <td th:text="${#temporals.format(log.timestamp,'yyyy-MM-dd HH:mm')}">Time</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${#lists.isEmpty(logs)}" class="card text-center" style="padding:40px;">
+            <p class="text-muted">No audit logs recorded yet.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

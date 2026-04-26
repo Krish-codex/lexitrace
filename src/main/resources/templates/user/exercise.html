@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Exercise — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: user-sidebar}"></div>
+    <div class="main-content">
+        <div class="page-header">
+            <h1><span th:text="${language?.flagEmoji}">🏳</span> <span th:text="${lesson.title}">Lesson</span></h1>
+            <p th:text="${lesson.description}">Description</p>
+        </div>
+
+        <div class="exercise-container">
+            <!-- Progress -->
+            <div class="card mb-24">
+                <div class="flex-between" style="margin-bottom:8px;">
+                    <span class="text-muted" th:text="'Total: ' + ${totalExercises} + ' exercises'">exercises</span>
+                    <span class="badge badge-info" th:text="${lesson.difficulty}">Beginner</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width:0%" id="progressBar"></div>
+                </div>
+            </div>
+
+            <form th:action="@{/user/exercise/{id}/submit(id=${lesson.id})}" method="post" id="exerciseForm">
+                <div th:each="ex,iter : ${exercises}" class="exercise-card" th:id="'exercise-' + ${iter.index}">
+                    <div class="exercise-type" th:text="${ex['type']}">MCQ</div>
+                    <div class="exercise-question" th:text="${ex['question']}">Question?</div>
+
+                    <!-- MCQ -->
+                    <div th:if="${ex['type'] == 'MCQ'}" class="exercise-options">
+                        <div th:each="opt : ${ex['options']}">
+                            <label class="option-btn" th:onclick="'this.querySelector(\'input\').checked=true; document.querySelectorAll(\'[name=answer_'+${ex['id']}+']\').forEach(function(el){el.closest(\'.option-btn\').classList.remove(\'selected\')}); this.classList.add(\'selected\'); updateProgress();'">
+                                <input type="radio" th:name="'answer_' + ${ex['id']}" th:value="${opt}">
+                                <span th:text="${opt}">Option</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Fill Blank -->
+                    <div th:if="${ex['type'] == 'FILL_BLANK'}">
+                        <input type="text" class="form-control" th:name="'answer_' + ${ex['id']}" placeholder="Type your answer..." required onchange="updateProgress()">
+                    </div>
+
+                    <!-- Translation -->
+                    <div th:if="${ex['type'] == 'TRANSLATION'}">
+                        <input type="text" class="form-control" th:name="'answer_' + ${ex['id']}" placeholder="Type the translation..." required onchange="updateProgress()">
+                    </div>
+
+                    <!-- Matching -->
+                    <div th:if="${ex['type'] == 'MATCHING'}">
+                        <p class="text-muted" style="margin-bottom:8px;font-size:0.85rem;">Type pairs as: left1=right1,left2=right2</p>
+                        <input type="text" class="form-control" th:name="'answer_' + ${ex['id']}" placeholder="e.g. un=one,deux=two,trois=three" required onchange="updateProgress()">
+                    </div>
+
+                    <div style="margin-top:8px;text-align:right;">
+                        <span class="badge badge-info" th:text="${ex['points']} + ' pts'">10 pts</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Submit Answers ✓</button>
+            </form>
+
+            <a th:href="@{/user/lessons/{id}(id=${language?.id})}" class="btn btn-outline mt-16">← Back to Lessons</a>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+const total = /*[[${totalExercises}]]*/ 1;
+function updateProgress() {
+    const form = document.getElementById('exerciseForm');
+    const inputs = form.querySelectorAll('input[type=text], input[type=radio]:checked');
+    let answered = 0;
+    const seen = new Set();
+    inputs.forEach(i => { if (i.value && i.value.trim()) { seen.add(i.name); } });
+    answered = seen.size;
+    const pct = Math.min((answered / total) * 100, 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+}
+</script>
+</body>
+</html>

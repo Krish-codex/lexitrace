@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Lessons — Admin — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <div class="app-layout">
+        <div th:replace="~{fragments/sidebar :: admin-sidebar}"></div>
+        <div class="main-content">
+            <div class="page-header">
+                <h1>📚 Lesson Management</h1>
+            </div>
+
+            <!-- Language Selector -->
+            <div class="card mb-24">
+                <form th:action="@{/admin/lessons}" method="get" style="display:flex;gap:12px;align-items:end;">
+                    <div class="form-group" style="margin:0;flex:1;">
+                        <label>Select Language</label>
+                        <select name="languageId" class="form-control" required>
+                            <option value="">-- Choose --</option>
+                            <option th:each="l : ${languages}" th:value="${l.id}"
+                                th:text="${l.flagEmoji + ' ' + l.name}" th:selected="${selectedLanguageId == l.id}">Lang
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Load</button>
+                </form>
+            </div>
+
+            <div th:if="${selectedLanguageId != null}">
+                <!-- Add Lesson -->
+                <div class="card mb-24">
+                    <h3 style="margin-bottom:16px;">Add Lesson</h3>
+                    <form th:action="@{/admin/lessons/add}" method="post">
+                        <input type="hidden" name="languageId" th:value="${selectedLanguageId}">
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                            <div class="form-group" style="flex:1;min-width:200px;"><label>Title</label><input
+                                    type="text" name="title" class="form-control" required></div>
+                            <div class="form-group" style="width:150px;"><label>Difficulty</label>
+                                <select name="difficulty" class="form-control">
+                                    <option>Beginner</option>
+                                    <option>Intermediate</option>
+                                    <option>Advanced</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="width:80px;"><label>Order</label><input type="number"
+                                    name="orderIndex" class="form-control" value="1" required></div>
+                        </div>
+                        <div class="form-group"><label>Description</label><input type="text" name="description"
+                                class="form-control"></div>
+                        <div class="form-group"><label>Content (HTML allowed)</label><textarea name="content"
+                                class="form-control" rows="4"></textarea></div>
+                        <button type="submit" class="btn btn-primary">Add Lesson</button>
+                    </form>
+                </div>
+
+                <!-- Lessons Table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Title</th>
+                                <th>Difficulty</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="l : ${lessons}">
+                                <td th:text="${l.orderIndex}">1</td>
+                                <td th:text="${l.title}">Lesson</td>
+                                <td><span class="badge badge-info" th:text="${l.difficulty}">Beginner</span></td>
+                                <td th:text="${l.description}">Desc</td>
+                                <td>
+                                    <a th:href="@{/admin/exercises(lessonId=${l.id})}"
+                                        class="btn btn-outline btn-sm">Exercises</a>
+                                    <form th:action="@{/admin/lessons/delete/{id}(id=${l.id})}" method="post"
+                                        style="display:inline;">
+                                        <input type="hidden" name="languageId" th:value="${selectedLanguageId}">
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Delete?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

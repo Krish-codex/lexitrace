@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>User Management — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: admin-sidebar}"></div>
+    <div class="main-content">
+        <div class="page-header flex-between">
+            <h1>👥 User Management</h1>
+            <form th:action="@{/admin/users}" method="get" style="display:flex;gap:8px;">
+                <input type="text" name="search" class="form-control" placeholder="Search users..." th:value="${search}" style="width:250px;">
+                <button type="submit" class="btn btn-primary btn-sm">Search</button>
+            </form>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+                <tbody>
+                    <tr th:each="u : ${users}">
+                        <td th:text="${u.id}">1</td>
+                        <td th:text="${u.name}">Name</td>
+                        <td th:text="${u.email}">Email</td>
+                        <td><span class="badge" th:classappend="${u.role == 'ADMIN'} ? 'badge-info' : 'badge-success'" th:text="${u.role}">USER</span></td>
+                        <td>
+                            <span th:if="${u.isBanned}" class="badge badge-danger">Banned</span>
+                            <span th:unless="${u.isBanned}" class="badge badge-success">Active</span>
+                        </td>
+                        <td th:text="${#temporals.format(u.createdAt,'MMM dd, yyyy')}">Date</td>
+                        <td style="white-space:nowrap;">
+                            <form th:if="${!u.isBanned && u.role != 'ADMIN'}" th:action="@{/admin/users/ban/{id}(id=${u.id})}" method="post" style="display:inline;">
+                                <button class="btn btn-danger btn-sm">Ban</button>
+                            </form>
+                            <form th:if="${u.isBanned}" th:action="@{/admin/users/unban/{id}(id=${u.id})}" method="post" style="display:inline;">
+                                <button class="btn btn-success btn-sm">Unban</button>
+                            </form>
+                            <form th:if="${u.role != 'ADMIN'}" th:action="@{/admin/users/reset-password/{id}(id=${u.id})}" method="post" style="display:inline;">
+                                <button class="btn btn-warning btn-sm">Reset PW</button>
+                            </form>
+                            <form th:if="${u.role != 'ADMIN'}" th:action="@{/admin/users/delete/{id}(id=${u.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this user?');">
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

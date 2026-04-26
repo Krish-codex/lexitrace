@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Analytics — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: user-sidebar}"></div>
+    <div class="main-content">
+        <div class="page-header"><h1>📊 My Analytics</h1><p>Track your learning journey</p></div>
+
+        <div class="card-grid">
+            <div class="stat-card purple"><div class="stat-icon">⭐</div><div class="stat-value" th:text="${totalXP}">0</div><div class="stat-label">Total XP</div></div>
+            <div class="stat-card green"><div class="stat-icon">🔥</div><div class="stat-value" th:text="${streak}">0</div><div class="stat-label">Current Streak</div></div>
+            <div class="stat-card orange"><div class="stat-icon">⏱</div><div class="stat-value"><span th:text="${totalTime / 60}">0</span>m</div><div class="stat-label">Time Learning</div></div>
+        </div>
+
+        <div class="grid-2">
+            <div class="chart-container"><h3>📈 XP Over 7 Days</h3><canvas id="xpChart"></canvas></div>
+            <div class="chart-container"><h3>📚 Lessons Per Language</h3><canvas id="lessonsChart"></canvas></div>
+        </div>
+
+        <div class="chart-container"><h3>🎯 Accuracy Per Language</h3><canvas id="accuracyChart"></canvas></div>
+
+        <!-- Streak Heatmap -->
+        <div class="card mb-24">
+            <h3 style="margin-bottom:16px;">🗓 Activity (Last 90 Days)</h3>
+            <div class="heatmap" id="heatmap"></div>
+        </div>
+
+        <!-- Badges -->
+        <div class="card" th:if="${!#lists.isEmpty(badges)}">
+            <h3 style="margin-bottom:16px;">🎖 Achievements</h3>
+            <div class="badge-grid">
+                <div th:each="b : ${badges}" class="badge-item">
+                    <div class="badge-icon" th:text="${b['icon']}">🎓</div>
+                    <div class="badge-name" th:text="${b['name']}">Badge</div>
+                    <div class="badge-desc" th:text="${b['description']}">desc</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+const weeklyXP = /*[[${weeklyXP}]]*/ {};
+const lessonsPerLang = /*[[${lessonsPerLang}]]*/ {};
+const accuracy = /*[[${accuracy}]]*/ {};
+const calendar = /*[[${activityCalendar}]]*/ {};
+
+const chartColors = { line: '#6c63ff', fill: 'rgba(108,99,255,0.1)', bar: ['#6c63ff','#e91e8c','#00c9a7','#ffd93d','#ff6b6b'] };
+const gridColor = 'rgba(255,255,255,0.05)';
+const tickColor = '#a0a0b8';
+const scaleOpts = { x:{ticks:{color:tickColor},grid:{color:gridColor}}, y:{ticks:{color:tickColor},grid:{color:gridColor},beginAtZero:true} };
+
+new Chart(document.getElementById('xpChart'), {
+    type:'line', data:{labels:Object.keys(weeklyXP).map(d=>new Date(d).toLocaleDateString('en',{weekday:'short'})),
+    datasets:[{label:'XP',data:Object.values(weeklyXP),borderColor:chartColors.line,backgroundColor:chartColors.fill,fill:true,tension:0.4}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:scaleOpts}
+});
+
+new Chart(document.getElementById('lessonsChart'), {
+    type:'bar', data:{labels:Object.keys(lessonsPerLang),
+    datasets:[{label:'Lessons',data:Object.values(lessonsPerLang),backgroundColor:chartColors.bar}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:scaleOpts}
+});
+
+new Chart(document.getElementById('accuracyChart'), {
+    type:'bar', data:{labels:Object.keys(accuracy),
+    datasets:[{label:'Accuracy %',data:Object.values(accuracy),backgroundColor:['#00c9a7','#6c63ff','#e91e8c']}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{...scaleOpts,y:{...scaleOpts.y,max:100}}}
+});
+
+// Heatmap
+const heatmap = document.getElementById('heatmap');
+Object.entries(calendar).forEach(([date, val]) => {
+    const cell = document.createElement('div');
+    cell.className = 'heatmap-cell';
+    if(val > 0) cell.classList.add(val > 50 ? 'level-4' : val > 30 ? 'level-3' : val > 10 ? 'level-2' : 'level-1');
+    cell.title = date + ': ' + val + ' XP';
+    heatmap.appendChild(cell);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <h1>🌐 LexiTrace</h1>
+            <p>Create your free account</p>
+        </div>
+        <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+        <form th:action="@{/register}" method="post">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" placeholder="you@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Min 6 characters" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" name="confirmPassword" class="form-control" placeholder="Re-enter password" required>
+            </div>
+            <div class="form-group">
+                <label>Security Question</label>
+                <select name="securityQuestion" class="form-control" required>
+                    <option value="What is your favorite color?">What is your favorite color?</option>
+                    <option value="What is your pet name?">What is your pet's name?</option>
+                    <option value="What city were you born in?">What city were you born in?</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Security Answer</label>
+                <input type="text" name="securityAnswer" class="form-control" placeholder="Your answer" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Create Account</button>
+        </form>
+        <div style="text-align:center;margin-top:20px;">
+            Already have an account? <a th:href="@{/login}">Sign in</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

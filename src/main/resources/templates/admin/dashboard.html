@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: admin-sidebar}"></div>
+    <div class="main-content">
+        <div class="page-header"><h1>📈 Admin Dashboard</h1><p>Platform overview</p></div>
+
+        <div class="card-grid">
+            <div class="stat-card purple"><div class="stat-icon">👥</div><div class="stat-value" th:text="${totalUsers}">0</div><div class="stat-label">Total Users</div></div>
+            <div class="stat-card green"><div class="stat-icon">🆕</div><div class="stat-value" th:text="${activeToday}">0</div><div class="stat-label">New Today</div></div>
+            <div class="stat-card orange"><div class="stat-icon">📚</div><div class="stat-value" th:text="${totalLessons}">0</div><div class="stat-label">Lessons</div></div>
+            <div class="stat-card blue"><div class="stat-icon">✏️</div><div class="stat-value" th:text="${totalExercises}">0</div><div class="stat-label">Exercises</div></div>
+        </div>
+
+        <div class="grid-2">
+            <div class="chart-container"><h3>📊 New Registrations (30 Days)</h3><canvas id="regChart"></canvas></div>
+            <div class="chart-container"><h3>🌍 Language Popularity</h3><canvas id="langChart"></canvas></div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom:16px;">🏆 Top Users</h3>
+            <div th:each="u,i : ${topUsers}" class="leaderboard-item">
+                <div class="rank" th:text="${i.index+1}">1</div>
+                <div class="lb-name" th:text="${u.userName}">User</div>
+                <div class="lb-xp"><span th:text="${u.totalPoints}">0</span> XP</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+const reg = /*[[${registrations}]]*/ {};
+const lang = /*[[${languagePopularity}]]*/ {};
+const gc = 'rgba(255,255,255,0.05)', tc = '#a0a0b8';
+new Chart(document.getElementById('regChart'),{type:'line',data:{labels:Object.keys(reg).map(d=>d.substring(5)),datasets:[{data:Object.values(reg),borderColor:'#6c63ff',backgroundColor:'rgba(108,99,255,0.1)',fill:true,tension:0.3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gc}},y:{ticks:{color:tc},grid:{color:gc},beginAtZero:true}}}});
+new Chart(document.getElementById('langChart'),{type:'doughnut',data:{labels:Object.keys(lang),datasets:[{data:Object.values(lang),backgroundColor:['#6c63ff','#e91e8c','#00c9a7','#ffd93d','#ff6b6b']}]},options:{responsive:true,plugins:{legend:{labels:{color:tc}}}}});
+</script>
+</body>
+</html>

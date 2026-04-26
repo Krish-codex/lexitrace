@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Dashboard — LexiTrace</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-layout">
+    <div th:replace="~{fragments/sidebar :: user-sidebar}"></div>
+    <div class="main-content">
+        <div class="page-header flex-between">
+            <div>
+                <h1>Welcome back, <span th:text="${user.name}">User</span>! 👋</h1>
+                <p>Current streak: <strong th:text="${streak}">0</strong> 🔥 days — Total XP: <strong th:text="${totalXP}">0</strong></p>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="card-grid">
+            <div class="stat-card purple">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value" th:text="${streak}">0</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value" th:text="${totalXP}">0</div>
+                <div class="stat-label">Total XP</div>
+            </div>
+            <div class="stat-card orange">
+                <div class="stat-icon">🌍</div>
+                <div class="stat-value" th:text="${enrolledLanguages.size()}">0</div>
+                <div class="stat-label">Languages</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value" th:text="${badges.size()}">0</div>
+                <div class="stat-label">Badges Earned</div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <!-- Weekly XP Chart -->
+            <div class="chart-container">
+                <h3>📈 XP This Week</h3>
+                <canvas id="weeklyXpChart"></canvas>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="card">
+                <h3 style="margin-bottom:16px;">🏆 Top Learners</h3>
+                <div th:each="u,iter : ${topUsers}">
+                    <div class="leaderboard-item">
+                        <div class="rank" th:text="${iter.index + 1}">1</div>
+                        <div class="lb-name" th:text="${u.userName}">User</div>
+                        <div class="lb-xp"><span th:text="${u.totalPoints}">0</span> XP</div>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(topUsers)}" class="text-center text-muted" style="padding:20px;">No learners yet</div>
+            </div>
+        </div>
+
+        <!-- Continue Learning -->
+        <div class="card mb-24" th:if="${lastLesson != null}">
+            <h3 style="margin-bottom:12px;">📖 Continue Where You Left Off</h3>
+            <div class="lesson-item" style="margin:0;">
+                <div class="lesson-order" th:text="${lastLesson.orderIndex}">1</div>
+                <div class="lesson-info">
+                    <div class="lesson-title" th:text="${lastLesson.title}">Lesson</div>
+                    <div class="lesson-desc" th:text="${lastLesson.description}">Description</div>
+                </div>
+                <a th:href="@{/user/exercise/{id}(id=${lastLesson.id})}" class="btn btn-primary btn-sm">Continue →</a>
+            </div>
+        </div>
+
+        <!-- Enrolled Languages -->
+        <div class="card mb-24">
+            <div class="flex-between" style="margin-bottom:16px;">
+                <h3>🌍 My Languages</h3>
+                <a th:href="@{/user/languages}" class="btn btn-outline btn-sm">Browse All</a>
+            </div>
+            <div class="card-grid" th:if="${!#lists.isEmpty(enrolledLanguages)}">
+                <div th:each="lang : ${enrolledLanguages}" class="card lang-card" style="padding:20px;">
+                    <div class="flag" th:text="${lang.flagEmoji}">🏳</div>
+                    <div class="lang-name" th:text="${lang.name}">Language</div>
+                    <a th:href="@{/user/lessons/{id}(id=${lang.id})}" class="btn btn-primary btn-sm mt-16">Start Learning</a>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(enrolledLanguages)}" class="text-center text-muted" style="padding:30px;">
+                <p>You haven't enrolled in any language yet!</p>
+                <a th:href="@{/user/languages}" class="btn btn-primary mt-16">Browse Languages</a>
+            </div>
+        </div>
+
+        <!-- Badges -->
+        <div class="card" th:if="${!#lists.isEmpty(badges)}">
+            <h3 style="margin-bottom:16px;">🎖 Your Badges</h3>
+            <div class="badge-grid">
+                <div th:each="b : ${badges}" class="badge-item">
+                    <div class="badge-icon" th:text="${b['icon']}">🎓</div>
+                    <div class="badge-name" th:text="${b['name']}">Badge</div>
+                    <div class="badge-desc" th:text="${b['description']}">desc</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+const weeklyData = /*[[${weeklyXP}]]*/ {};
+const labels = Object.keys(weeklyData).map(d => { const dt = new Date(d); return dt.toLocaleDateString('en',{weekday:'short'}); });
+const values = Object.values(weeklyData);
+new Chart(document.getElementById('weeklyXpChart'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'XP', data: values, borderColor: '#6c63ff', backgroundColor: 'rgba(108,99,255,0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#6c63ff' }] },
+    options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#a0a0b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { ticks: { color: '#a0a0b8' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true } } }
+});
+</script>
+</body>
+</html>
