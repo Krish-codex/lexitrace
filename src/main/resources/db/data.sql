@@ -9,7 +9,10 @@
 INSERT INTO languages (name, code, flag_emoji, is_active) VALUES
 ('French', 'fr', '🇫🇷', TRUE),
 ('Spanish', 'es', '🇪🇸', TRUE),
-('Japanese', 'ja', '🇯🇵', TRUE);
+('Japanese', 'ja', '🇯🇵', TRUE),
+('German', 'de', '🇩🇪', TRUE),
+('Italian', 'it', '🇮🇹', TRUE),
+('Korean', 'ko', '🇰🇷', TRUE);
 
 -- ===================================================================
 -- French Lessons
@@ -42,128 +45,6 @@ INSERT INTO lessons (language_id, title, description, content, difficulty, order
 (3, 'Directions', 'Ask for and give directions in Japanese', '<h2>Directions</h2><p>Right: migi<br>Left: hidari<br>Straight: massugu</p>', 'Intermediate', 5);
 
 -- ===================================================================
--- French Exercises
--- ===================================================================
--- Lesson 1: Greetings
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(1, 'MCQ', 'What does "Bonjour" mean?', 'Hello', '["Hello","Goodbye","Thank you","Please"]', 10),
-(1, 'FILL_BLANK', 'Complete: "_____ , je m''appelle Marie." (Hello)', 'Bonjour', NULL, 10),
-(1, 'MCQ', 'How do you say "Goodbye" in French?', 'Au revoir', '["Merci","Au revoir","Bonjour","Salut"]', 10),
-(1, 'TRANSLATION', 'Translate to French: "My name is John"', 'Je m''appelle John', NULL, 15);
-
--- Lesson 2: Numbers
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(2, 'MCQ', 'What is "trois" in English?', 'Three', '["One","Two","Three","Four"]', 10),
-(2, 'FILL_BLANK', 'Write the French word for the number 5:', 'cinq', NULL, 10),
-(2, 'MCQ', 'What number is "dix"?', '10', '["5","8","10","12"]', 10),
-(2, 'MATCHING', 'Match the French numbers with English', 'un=one,deux=two,trois=three', '["un","deux","trois","one","two","three"]', 20);
-
--- Lesson 3: Colors
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(3, 'MCQ', 'What color is "rouge"?', 'Red', '["Blue","Red","Green","Yellow"]', 10),
-(3, 'FILL_BLANK', 'The French word for "blue" is _____.', 'bleu', NULL, 10),
-(3, 'MCQ', 'What does "vert" mean?', 'Green', '["White","Black","Green","Orange"]', 10),
-(3, 'TRANSLATION', 'Translate to English: "Le ciel est bleu"', 'The sky is blue', NULL, 15);
-
--- Lesson 4: Food & Dining
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(4, 'MCQ', 'What is "pain" in English?', 'Bread', '["Water","Bread","Cheese","Wine"]', 10),
-(4, 'FILL_BLANK', 'I would like water: "Je voudrais de l''_____"', 'eau', NULL, 10),
-(4, 'TRANSLATION', 'Translate: "The menu, please"', 'Le menu, s''il vous plaît', NULL, 15),
-(4, 'MCQ', 'What does "fromage" mean?', 'Cheese', '["Ham","Cheese","Butter","Milk"]', 10);
-
--- Lesson 5: Travel
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(5, 'MCQ', 'What does "Où est la gare?" mean?', 'Where is the train station?', '["Where is the hotel?","Where is the train station?","Where is the airport?","Where is the museum?"]', 10),
-(5, 'FILL_BLANK', 'I need a taxi: "J''ai besoin d''un _____"', 'taxi', NULL, 10),
-(5, 'TRANSLATION', 'Translate: "How much does it cost?"', 'Combien ça coûte?', NULL, 15),
-(5, 'MCQ', 'What is "l''aéroport"?', 'The airport', '["The hotel","The airport","The restaurant","The beach"]', 10);
-
--- ===================================================================
--- Spanish Exercises
--- ===================================================================
--- Lesson 6: Greetings
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(6, 'MCQ', 'What does "Hola" mean?', 'Hello', '["Hello","Goodbye","Thanks","Please"]', 10),
-(6, 'FILL_BLANK', 'Good morning in Spanish: "Buenos _____"', 'días', NULL, 10),
-(6, 'MCQ', 'How do you say "Good night" in Spanish?', 'Buenas noches', '["Buenos días","Buenas tardes","Buenas noches","Hasta luego"]', 10),
-(6, 'TRANSLATION', 'Translate to Spanish: "How are you?"', '¿Cómo estás?', NULL, 15);
-
--- Lesson 7: Family
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(7, 'MCQ', 'What is "madre" in English?', 'Mother', '["Father","Mother","Sister","Brother"]', 10),
-(7, 'FILL_BLANK', 'My father: "Mi _____"', 'padre', NULL, 10),
-(7, 'MATCHING', 'Match family members', 'hermano=brother,hermana=sister,hijo=son', '["hermano","hermana","hijo","brother","sister","son"]', 20),
-(7, 'MCQ', 'What does "abuelo" mean?', 'Grandfather', '["Uncle","Cousin","Grandfather","Nephew"]', 10);
-
--- Lesson 8: Animals
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(8, 'MCQ', 'What animal is "gato"?', 'Cat', '["Dog","Cat","Bird","Fish"]', 10),
-(8, 'FILL_BLANK', 'Dog in Spanish is _____.', 'perro', NULL, 10),
-(8, 'MCQ', 'What does "pájaro" mean?', 'Bird', '["Fish","Bird","Horse","Rabbit"]', 10),
-(8, 'TRANSLATION', 'Translate: "I have a cat and a dog"', 'Tengo un gato y un perro', NULL, 15);
-
--- Lesson 9: Weather
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(9, 'MCQ', 'What does "Hace sol" mean?', 'It is sunny', '["It is raining","It is sunny","It is cold","It is windy"]', 10),
-(9, 'FILL_BLANK', 'It is raining: "Está _____"', 'lloviendo', NULL, 10),
-(9, 'MCQ', 'How do you say "cold" in Spanish?', 'frío', '["caliente","frío","nublado","ventoso"]', 10),
-(9, 'TRANSLATION', 'Translate: "What is the weather like today?"', '¿Qué tiempo hace hoy?', NULL, 15);
-
--- Lesson 10: Shopping
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(10, 'MCQ', 'What does "¿Cuánto cuesta?" mean?', 'How much does it cost?', '["Where is it?","How much does it cost?","What is this?","Do you have it?"]', 10),
-(10, 'FILL_BLANK', 'I want to buy: "Quiero _____"', 'comprar', NULL, 10),
-(10, 'TRANSLATION', 'Translate: "The store is closed"', 'La tienda está cerrada', NULL, 15),
-(10, 'MCQ', 'What is "dinero"?', 'Money', '["Change","Money","Price","Receipt"]', 10);
-
--- ===================================================================
--- Japanese Exercises
--- ===================================================================
--- Lesson 11: Hiragana Basics
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(11, 'MCQ', 'What sound does "あ" make?', 'a', '["a","i","u","e"]', 10),
-(11, 'MCQ', 'Which hiragana represents "ka"?', 'か', '["き","く","か","け"]', 10),
-(11, 'MATCHING', 'Match hiragana to romaji', 'あ=a,い=i,う=u', '["あ","い","う","a","i","u"]', 20),
-(11, 'FILL_BLANK', 'Write the romaji for "さ":', 'sa', NULL, 10);
-
--- Lesson 12: Greetings (Japanese)
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(12, 'MCQ', 'What does "こんにちは" mean?', 'Hello (daytime)', '["Good morning","Hello (daytime)","Good evening","Goodbye"]', 10),
-(12, 'FILL_BLANK', 'Good morning in Japanese: "_____ございます"', 'おはよう', NULL, 10),
-(12, 'MCQ', 'How do you say "Thank you" in Japanese?', 'ありがとう', '["すみません","ありがとう","こんばんは","さようなら"]', 10),
-(12, 'TRANSLATION', 'Translate to English: "さようなら"', 'Goodbye', NULL, 15);
-
--- Lesson 13: Numbers (Japanese)
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(13, 'MCQ', 'What number is "いち"?', '1', '["1","2","3","4"]', 10),
-(13, 'FILL_BLANK', 'The Japanese word for 3 is _____.', 'さん', NULL, 10),
-(13, 'MCQ', 'What is "じゅう"?', '10', '["5","7","10","100"]', 10),
-(13, 'MATCHING', 'Match Japanese numbers', 'いち=1,に=2,さん=3', '["いち","に","さん","1","2","3"]', 20);
-
--- Lesson 14: Food (Japanese)
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(14, 'MCQ', 'What is "すし" in English?', 'Sushi', '["Ramen","Sushi","Tempura","Rice"]', 10),
-(14, 'FILL_BLANK', 'Water in Japanese is _____.', 'みず', NULL, 10),
-(14, 'TRANSLATION', 'Translate: "I want to eat ramen"', 'ラーメンが食べたいです', NULL, 15),
-(14, 'MCQ', 'What does "おいしい" mean?', 'Delicious', '["Expensive","Delicious","Spicy","Sweet"]', 10);
-
--- Lesson 15: Directions (Japanese)
-INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-(15, 'MCQ', 'What does "みぎ" mean?', 'Right', '["Left","Right","Straight","Back"]', 10),
-(15, 'FILL_BLANK', 'Left in Japanese is _____.', 'ひだり', NULL, 10),
-(15, 'MCQ', 'What is "まっすぐ"?', 'Straight ahead', '["Turn","Straight ahead","Behind","Next to"]', 10),
-(15, 'TRANSLATION', 'Translate: "Where is the station?"', '駅はどこですか？', NULL, 15);
-
--- ===================================================================
--- Additional Languages
--- ===================================================================
-INSERT INTO languages (name, code, flag_emoji, is_active) VALUES
-('German', 'de', '????', TRUE),
-('Italian', 'it', '????', TRUE),
-('Korean', 'ko', '????', TRUE);
-
--- ===================================================================
 -- German Lessons
 -- ===================================================================
 INSERT INTO lessons (language_id, title, description, content, difficulty, order_index) VALUES
@@ -187,11 +68,86 @@ INSERT INTO lessons (language_id, title, description, content, difficulty, order
 -- Korean Lessons
 -- ===================================================================
 INSERT INTO lessons (language_id, title, description, content, difficulty, order_index) VALUES
-((SELECT id FROM languages WHERE code='ko'), 'Hangul Basics', 'Learn Korean alphabet', '<h2>Korean Vowels</h2><p>? (a)<br>? (eo)<br>? (o)<br>? (u)<br>? (eu)<br>? (i)</p>', 'Beginner', 1),
-((SELECT id FROM languages WHERE code='ko'), 'Greetings', 'Basic Korean greetings', '<h2>Korean Greetings</h2><p>????? = Hello<br>????? = Thank you<br>??? ??? = Goodbye<br>? = Yes<br>??? = No</p>', 'Beginner', 2),
-((SELECT id FROM languages WHERE code='ko'), 'Numbers', 'Count in Korean', '<h2>Korean Numbers</h2><p>1: ? (il)<br>2: ? (i)<br>3: ? (sam)<br>4: ? (sa)<br>5: ? (o)</p>', 'Beginner', 3),
-((SELECT id FROM languages WHERE code='ko'), 'Food', 'Korean food vocabulary', '<h2>Korean Food</h2><p>Rice: ? (bap)<br>Water: ? (mul)<br>Kimchi: ??<br>Delicious: ???? (masisseoyo)</p>', 'Intermediate', 4),
-((SELECT id FROM languages WHERE code='ko'), 'Directions', 'Directions in Korean', '<h2>Korean Directions</h2><p>Left: ?? (oenjjok)<br>Right: ??? (oreunjjok)<br>Straight: ?? (jikjin)</p>', 'Intermediate', 5);
+((SELECT id FROM languages WHERE code='ko'), 'Hangul Basics', 'Learn Korean alphabet', '<h2>Korean Vowels</h2><p>ㅏ (a)<br>ㅓ (eo)<br>ㅗ (o)<br>ㅜ (u)<br>ㅡ (eu)<br>ㅣ (i)</p>', 'Beginner', 1),
+((SELECT id FROM languages WHERE code='ko'), 'Greetings', 'Basic Korean greetings', '<h2>Korean Greetings</h2><p>안녕하세요 = Hello<br>감사합니다 = Thank you<br>안녕히 가세요 = Goodbye<br>네 = Yes<br>아니요 = No</p>', 'Beginner', 2),
+((SELECT id FROM languages WHERE code='ko'), 'Numbers', 'Count in Korean', '<h2>Korean Numbers</h2><p>1: 일 (일)<br>2: 이 (이)<br>3: 삼 (삼)<br>4: 사 (사)<br>5: 오 (오)</p>', 'Beginner', 3),
+((SELECT id FROM languages WHERE code='ko'), 'Food', 'Korean food vocabulary', '<h2>Korean Food</h2><p>Rice: 밥 (bap)<br>Water: 물 (mul)<br>Kimchi: 김치<br>Delicious: 맛있어요 (masisseoyo)</p>', 'Intermediate', 4),
+((SELECT id FROM languages WHERE code='ko'), 'Directions', 'Directions in Korean', '<h2>Korean Directions</h2><p>Left: 왼쪽 (oenjjok)<br>Right: 오른쪽 (oreunjjok)<br>Straight: 직진 (jikjin)</p>', 'Intermediate', 5);
+
+-- ===================================================================
+-- French Exercises
+-- ===================================================================
+INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
+(1, 'MCQ', 'What does "Bonjour" mean?', 'Hello', '["Hello","Goodbye","Thank you","Please"]', 10),
+(1, 'FILL_BLANK', 'Complete: "_____ , je m''appelle Marie." (Hello)', 'Bonjour', NULL, 10),
+(1, 'MCQ', 'How do you say "Goodbye" in French?', 'Au revoir', '["Merci","Au revoir","Bonjour","Salut"]', 10),
+(1, 'TRANSLATION', 'Translate to French: "My name is John"', 'Je m''appelle John', NULL, 15),
+(2, 'MCQ', 'What is "trois" in English?', 'Three', '["One","Two","Three","Four"]', 10),
+(2, 'FILL_BLANK', 'Write the French word for the number 5:', 'cinq', NULL, 10),
+(2, 'MCQ', 'What number is "dix"?', '10', '["5","8","10","12"]', 10),
+(2, 'MATCHING', 'Match the French numbers with English', 'un=one,deux=two,trois=three', '["un","deux","trois","one","two","three"]', 20),
+(3, 'MCQ', 'What color is "rouge"?', 'Red', '["Blue","Red","Green","Yellow"]', 10),
+(3, 'FILL_BLANK', 'The French word for "blue" is _____.', 'bleu', NULL, 10),
+(3, 'MCQ', 'What does "vert" mean?', 'Green', '["White","Black","Green","Orange"]', 10),
+(3, 'TRANSLATION', 'Translate to English: "Le ciel est bleu"', 'The sky is blue', NULL, 15),
+(4, 'MCQ', 'What is "pain" in English?', 'Bread', '["Water","Bread","Cheese","Wine"]', 10),
+(4, 'FILL_BLANK', 'I would like water: "Je voudrais de l''_____"', 'eau', NULL, 10),
+(4, 'TRANSLATION', 'Translate: "The menu, please"', 'Le menu, s''il vous plaît', NULL, 15),
+(4, 'MCQ', 'What does "fromage" mean?', 'Cheese', '["Ham","Cheese","Butter","Milk"]', 10),
+(5, 'MCQ', 'What does "Où est la gare?" mean?', 'Where is the train station?', '["Where is the hotel?","Where is the train station?","Where is the airport?","Where is the museum?"]', 10),
+(5, 'FILL_BLANK', 'I need a taxi: "J''ai besoin d''un _____"', 'taxi', NULL, 10),
+(5, 'TRANSLATION', 'Translate: "How much does it cost?"', 'Combien ça coûte?', NULL, 15),
+(5, 'MCQ', 'What is "l''aéroport"?', 'The airport', '["The hotel","The airport","The restaurant","The beach"]', 10);
+
+-- ===================================================================
+-- Spanish Exercises
+-- ===================================================================
+INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
+(6, 'MCQ', 'What does "Hola" mean?', 'Hello', '["Hello","Goodbye","Thanks","Please"]', 10),
+(6, 'FILL_BLANK', 'Good morning in Spanish: "Buenos _____"', 'días', NULL, 10),
+(6, 'MCQ', 'How do you say "Good night" in Spanish?', 'Buenas noches', '["Buenos días","Buenas tardes","Buenas noches","Hasta luego"]', 10),
+(6, 'TRANSLATION', 'Translate to Spanish: "How are you?"', '¿Cómo estás?', NULL, 15),
+(7, 'MCQ', 'What is "madre" in English?', 'Mother', '["Father","Mother","Sister","Brother"]', 10),
+(7, 'FILL_BLANK', 'My father: "Mi _____"', 'padre', NULL, 10),
+(7, 'MATCHING', 'Match family members', 'hermano=brother,hermana=sister,hijo=son', '["hermano","hermana","hijo","brother","sister","son"]', 20),
+(7, 'MCQ', 'What does "abuelo" mean?', 'Grandfather', '["Uncle","Cousin","Grandfather","Nephew"]', 10),
+(8, 'MCQ', 'What animal is "gato"?', 'Cat', '["Dog","Cat","Bird","Fish"]', 10),
+(8, 'FILL_BLANK', 'Dog in Spanish is _____.', 'perro', NULL, 10),
+(8, 'MCQ', 'What does "pájaro" mean?', 'Bird', '["Fish","Bird","Horse","Rabbit"]', 10),
+(8, 'TRANSLATION', 'Translate: "I have a cat and a dog"', 'Tengo un gato y un perro', NULL, 15),
+(9, 'MCQ', 'What does "Hace sol" mean?', 'It is sunny', '["It is raining","It is sunny","It is cold","It is windy"]', 10),
+(9, 'FILL_BLANK', 'It is raining: "Está _____"', 'lloviendo', NULL, 10),
+(9, 'MCQ', 'How do you say "cold" in Spanish?', 'frío', '["caliente","frío","nublado","ventoso"]', 10),
+(9, 'TRANSLATION', 'Translate: "What is the weather like today?"', '¿Qué tiempo hace hoy?', NULL, 15),
+(10, 'MCQ', 'What does "¿Cuánto cuesta?" mean?', 'How much does it cost?', '["Where is it?","How much does it cost?","What is this?","Do you have it?"]', 10),
+(10, 'FILL_BLANK', 'I want to buy: "Quiero _____"', 'comprar', NULL, 10),
+(10, 'TRANSLATION', 'Translate: "The store is closed"', 'La tienda está cerrada', NULL, 15),
+(10, 'MCQ', 'What is "dinero"?', 'Money', '["Change","Money","Price","Receipt"]', 10);
+
+-- ===================================================================
+-- Japanese Exercises
+-- ===================================================================
+INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
+(11, 'MCQ', 'What sound does "あ" make?', 'a', '["a","i","u","e"]', 10),
+(11, 'MCQ', 'Which hiragana represents "ka"?', 'か', '["き","く","か","け"]', 10),
+(11, 'MATCHING', 'Match hiragana to romaji', 'あ=a,い=i,う=u', '["あ","い","う","a","i","u"]', 20),
+(11, 'FILL_BLANK', 'Write the romaji for "さ":', 'sa', NULL, 10),
+(12, 'MCQ', 'What does "こんにちは" mean?', 'Hello (daytime)', '["Good morning","Hello (daytime)","Good evening","Goodbye"]', 10),
+(12, 'FILL_BLANK', 'Good morning in Japanese: "_____ございます"', 'おはよう', NULL, 10),
+(12, 'MCQ', 'How do you say "Thank you" in Japanese?', 'ありがとう', '["すみません","ありがとう","こんばんは","さようなら"]', 10),
+(12, 'TRANSLATION', 'Translate to English: "さようなら"', 'Goodbye', NULL, 15),
+(13, 'MCQ', 'What number is "いち"?', '1', '["1","2","3","4"]', 10),
+(13, 'FILL_BLANK', 'The Japanese word for 3 is _____.', 'さん', NULL, 10),
+(13, 'MCQ', 'What is "じゅう"?', '10', '["5","7","10","100"]', 10),
+(13, 'MATCHING', 'Match Japanese numbers', 'いち=1,に=2,さん=3', '["いち","に","さん","1","2","3"]', 20),
+(14, 'MCQ', 'What is "すし" in English?', 'Sushi', '["Ramen","Sushi","Tempura","Rice"]', 10),
+(14, 'FILL_BLANK', 'Water in Japanese is _____.', 'みず', NULL, 10),
+(14, 'TRANSLATION', 'Translate: "I want to eat ramen"', 'ラーメン가食べたいです', NULL, 15),
+(14, 'MCQ', 'What does "おいしい" mean?', 'Delicious', '["Expensive","Delicious","Spicy","Sweet"]', 10),
+(15, 'MCQ', 'What does "みぎ" mean?', 'Right', '["Left","Right","Straight","Back"]', 10),
+(15, 'FILL_BLANK', 'Left in Japanese is _____.', 'ひだり', NULL, 10),
+(15, 'MCQ', 'What is "まっすぐ"?', 'Straight ahead', '["Turn","Straight ahead","Behind","Next to"]', 10),
+(15, 'TRANSLATION', 'Translate: "Where is the station?"', '駅はどこですか？', NULL, 15);
 
 -- ===================================================================
 -- German Exercises
@@ -233,15 +189,15 @@ INSERT INTO exercises (lesson_id, type, question, correct_answer, options, point
 -- Korean Exercises
 -- ===================================================================
 INSERT INTO exercises (lesson_id, type, question, correct_answer, options, points) VALUES
-((SELECT id FROM lessons WHERE title='Hangul Basics' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What sound does "?" make?', 'a', '["a","o","u","e"]', 10),
-((SELECT id FROM lessons WHERE title='Hangul Basics' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'Which is the vowel "o"?', '?', '["?","?","?","?"]', 10),
-((SELECT id FROM lessons WHERE title='Hangul Basics' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'FILL_BLANK', 'The romanization of ? is _____.', 'i', NULL, 10),
-((SELECT id FROM lessons WHERE title='Greetings' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What does "?????" mean?', 'Hello', '["Hello","Goodbye","Thanks","Sorry"]', 10),
-((SELECT id FROM lessons WHERE title='Greetings' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'How do you say Thank you in Korean?', '?????', '["?????","?????","???","?"]', 10),
-((SELECT id FROM lessons WHERE title='Greetings' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'TRANSLATION', 'Translate: "Goodbye"', '??? ???', NULL, 15),
-((SELECT id FROM lessons WHERE title='Numbers' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What number is "?"?', '3', '["1","2","3","4"]', 10),
-((SELECT id FROM lessons WHERE title='Numbers' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'FILL_BLANK', 'The Korean word for 1 is _____.', '?', NULL, 10),
-((SELECT id FROM lessons WHERE title='Food' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What is "?"?', 'Rice', '["Water","Rice","Kimchi","Tea"]', 10),
-((SELECT id FROM lessons WHERE title='Food' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'FILL_BLANK', 'Water in Korean is _____.', '?', NULL, 10),
-((SELECT id FROM lessons WHERE title='Directions' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What does "??" mean?', 'Left', '["Left","Right","Straight","Back"]', 10),
-((SELECT id FROM lessons WHERE title='Directions' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'FILL_BLANK', 'Right in Korean is _____.', '???', NULL, 10);
+((SELECT id FROM lessons WHERE title='Hangul Basics' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What sound does "ㅏ" make?', 'a', '["a","o","u","e"]', 10),
+((SELECT id FROM lessons WHERE title='Hangul Basics' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'Which is the vowel "o"?', 'ㅗ', '["ㅏ","ㅓ","ㅗ","ㅜ"]', 10),
+((SELECT id FROM lessons WHERE title='Hangul Basics' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'FILL_BLANK', 'The romanization of ㅣ is _____.', 'i', NULL, 10),
+((SELECT id FROM lessons WHERE title='Greetings' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What does "안녕하세요" mean?', 'Hello', '["Hello","Goodbye","Thanks","Sorry"]', 10),
+((SELECT id FROM lessons WHERE title='Greetings' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'How do you say Thank you in Korean?', '감사합니다', '["안녕하세요","감사합니다","아니요","네"]', 10),
+((SELECT id FROM lessons WHERE title='Greetings' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'TRANSLATION', 'Translate: "Goodbye"', '안녕히 가세요', NULL, 15),
+((SELECT id FROM lessons WHERE title='Numbers' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What number is "삼"?', '3', '["1","2","3","4"]', 10),
+((SELECT id FROM lessons WHERE title='Numbers' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'FILL_BLANK', 'The Korean word for 1 is _____.', '일', NULL, 10),
+((SELECT id FROM lessons WHERE title='Food' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What is "밥"?', 'Rice', '["Water","Rice","Kimchi","Tea"]', 10),
+((SELECT id FROM lessons WHERE title='Food' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'FILL_BLANK', 'Water in Korean is _____.', '물', NULL, 10),
+((SELECT id FROM lessons WHERE title='Directions' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'MCQ', 'What does "왼쪽" mean?', 'Left', '["Left","Right","Straight","Back"]', 10),
+((SELECT id FROM lessons WHERE title='Directions' AND language_id=(SELECT id FROM languages WHERE code='ko')), 'FILL_BLANK', 'Right in Korean is _____.', '오른쪽', NULL, 10);
