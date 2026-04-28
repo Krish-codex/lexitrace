@@ -20,7 +20,7 @@ public class Exercise {
     @Column(nullable = false, length = 30)
     private String type;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, length = 500)
     private String question;
 
     @Column(name = "correct_answer", nullable = false, length = 500)

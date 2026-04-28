@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS exercises (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     lesson_id BIGINT NOT NULL,
     type VARCHAR(30) NOT NULL,
-    question TEXT NOT NULL,
+    question VARCHAR(500) NOT NULL,
     correct_answer VARCHAR(500) NOT NULL,
     options TEXT,
     points INT NOT NULL DEFAULT 10,
