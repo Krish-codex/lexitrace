@@ -1,6 +1,5 @@
 package com.lexitrace.user;
 
-import com.lexitrace.models.User;
 import com.lexitrace.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

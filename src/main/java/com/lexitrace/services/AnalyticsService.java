@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@SuppressWarnings("null")
 public class AnalyticsService {
 
     @Autowired
@@ -21,9 +22,6 @@ public class AnalyticsService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private LeaderboardRepository leaderboardRepository;
 
     @Autowired
     private LessonRepository lessonRepository;
@@ -55,7 +53,7 @@ public class AnalyticsService {
         for (UserProgress up : recentProgress) {
             if (up.getCompletedAt() != null) {
                 String dateKey = up.getCompletedAt().toLocalDate().toString();
-                weeklyXP.merge(dateKey, up.getScore(), Integer::sum);
+                weeklyXP.merge(dateKey, up.getScore(), (a, b) -> a + b);
             }
         }
 
@@ -76,22 +74,31 @@ public class AnalyticsService {
 
         for (Map.Entry<Long, List<UserProgress>> entry : byLesson.entrySet()) {
             lessonRepository.findById(entry.getKey()).ifPresent(lesson -> {
-                long exerciseCount = exerciseRepository.countByLessonId(lesson.getId());
-                if (exerciseCount > 0) {
-                    for (UserProgress up : entry.getValue()) {
-                        int maxPoints = (int) (exerciseCount * 10); // approximate
-                        int pct = maxPoints > 0 ? (int) ((double) up.getScore() / maxPoints * 100) : 0;
-                        langScores.computeIfAbsent(lesson.getLanguageId(), k -> new ArrayList<>()).add(pct);
+                Long lessonId = lesson.getId();
+                if (lessonId != null) {
+                    long exerciseCount = exerciseRepository.countByLessonId(lessonId);
+                    if (exerciseCount > 0) {
+                        for (UserProgress up : entry.getValue()) {
+                            int maxPoints = (int) (exerciseCount * 10); // approximate
+                            int pct = maxPoints > 0 ? (int) ((double) up.getScore() / maxPoints * 100) : 0;
+                            Long langId = lesson.getLanguageId();
+                            if (langId != null) {
+                                langScores.computeIfAbsent(langId, k -> new ArrayList<>()).add(pct);
+                            }
+                        }
                     }
                 }
             });
         }
 
         for (Map.Entry<Long, List<Integer>> entry : langScores.entrySet()) {
-            languageRepository.findById(entry.getKey()).ifPresent(lang -> {
-                double avg = entry.getValue().stream().mapToInt(Integer::intValue).average().orElse(0);
-                accuracy.put(lang.getName(), Math.min(avg, 100.0));
-            });
+            Long langId = entry.getKey();
+            if (langId != null) {
+                languageRepository.findById(langId).ifPresent(lang -> {
+                    double avg = entry.getValue().stream().mapToInt(Integer::intValue).average().orElse(0);
+                    accuracy.put(lang.getName(), Math.min(avg, 100.0));
+                });
+            }
         }
 
         return accuracy;
@@ -117,7 +124,7 @@ public class AnalyticsService {
         for (User user : allUsers) {
             if ("ADMIN".equals(user.getRole())) continue;
             Integer totalPoints = userProgressRepository.getTotalScoreByUserId(user.getId());
-            topUsers.add(new UserRankDTO(user.getId(), user.getName(), user.getProfilePic(), totalPoints, 0));
+            topUsers.add(new UserRankDTO(user.getId(), user.getName(), user.getProfilePic(), totalPoints != null ? totalPoints : 0, 0));
         }
 
         topUsers.sort((a, b) -> Integer.compare(b.getTotalPoints(), a.getTotalPoints()));
@@ -146,8 +153,11 @@ public class AnalyticsService {
         List<Language> languages = languageRepository.findAll();
 
         for (Language lang : languages) {
-            long count = userLanguageRepository.countByLanguageId(lang.getId());
-            popularity.put(lang.getName(), (int) count);
+            Long langId = lang.getId();
+            if (langId != null) {
+                long count = userLanguageRepository.countByLanguageId(langId);
+                popularity.put(lang.getName(), (int) count);
+            }
         }
 
         return popularity;
@@ -157,7 +167,8 @@ public class AnalyticsService {
      * Returns total XP for a user.
      */
     public int getTotalXP(Long userId) {
-        return userProgressRepository.getTotalScoreByUserId(userId);
+        Integer total = userProgressRepository.getTotalScoreByUserId(userId);
+        return total != null ? total : 0;
     }
 
     /**
@@ -176,15 +187,24 @@ public class AnalyticsService {
 
         Map<Long, Integer> langCounts = new HashMap<>();
         for (UserProgress up : completed) {
-            lessonRepository.findById(up.getLessonId()).ifPresent(lesson -> {
-                langCounts.merge(lesson.getLanguageId(), 1, Integer::sum);
-            });
+            Long lessonId = up.getLessonId();
+            if (lessonId != null) {
+                lessonRepository.findById(lessonId).ifPresent(lesson -> {
+                    Long langId = lesson.getLanguageId();
+                    if (langId != null) {
+                        langCounts.merge(langId, 1, (a, b) -> a + b);
+                    }
+                });
+            }
         }
 
         for (Map.Entry<Long, Integer> entry : langCounts.entrySet()) {
-            languageRepository.findById(entry.getKey()).ifPresent(lang -> {
-                result.put(lang.getName(), entry.getValue());
-            });
+            Long langId = entry.getKey();
+            if (langId != null) {
+                languageRepository.findById(langId).ifPresent(lang -> {
+                    result.put(lang.getName(), entry.getValue());
+                });
+            }
         }
 
         return result;
@@ -207,7 +227,7 @@ public class AnalyticsService {
         for (UserProgress up : recent) {
             if (up.getCompletedAt() != null) {
                 String dateKey = up.getCompletedAt().toLocalDate().toString();
-                calendar.merge(dateKey, up.getScore(), Integer::sum);
+                calendar.merge(dateKey, up.getScore(), (a, b) -> a + b);
             }
         }
 
@@ -269,11 +289,11 @@ public class AnalyticsService {
         for (User user : users) {
             if ("ADMIN".equals(user.getRole())) continue;
             int xp = userProgressRepository.getTotalScoreByUserId(user.getId());
-            if (xp <= 50) distribution.merge("0-50", 1, Integer::sum);
-            else if (xp <= 100) distribution.merge("51-100", 1, Integer::sum);
-            else if (xp <= 250) distribution.merge("101-250", 1, Integer::sum);
-            else if (xp <= 500) distribution.merge("251-500", 1, Integer::sum);
-            else distribution.merge("500+", 1, Integer::sum);
+            if (xp <= 50) distribution.merge("0-50", 1, (a, b) -> a + b);
+            else if (xp <= 100) distribution.merge("51-100", 1, (a, b) -> a + b);
+            else if (xp <= 250) distribution.merge("101-250", 1, (a, b) -> a + b);
+            else if (xp <= 500) distribution.merge("251-500", 1, (a, b) -> a + b);
+            else distribution.merge("500+", 1, (a, b) -> a + b);
         }
 
         return distribution;
@@ -287,10 +307,16 @@ public class AnalyticsService {
         List<Lesson> allLessons = lessonRepository.findAll();
 
         for (Lesson lesson : allLessons) {
-            double rate = getLessonCompletionRate(lesson.getId());
-            languageRepository.findById(lesson.getLanguageId()).ifPresent(lang -> {
-                rates.put(lang.getName() + " - " + lesson.getTitle(), rate);
-            });
+            Long lessonId = lesson.getId();
+            if (lessonId != null) {
+                double rate = getLessonCompletionRate(lessonId);
+                Long langId = lesson.getLanguageId();
+                if (langId != null) {
+                    languageRepository.findById(langId).ifPresent(lang -> {
+                        rates.put(lang.getName() + " - " + lesson.getTitle(), rate);
+                    });
+                }
+            }
         }
 
         return rates;
@@ -304,13 +330,19 @@ public class AnalyticsService {
         List<Lesson> allLessons = lessonRepository.findAll();
 
         for (Lesson lesson : allLessons) {
-            long attempts = userProgressRepository.countAttemptsByLessonId(lesson.getId());
-            long completed = userProgressRepository.countCompletedByLessonId(lesson.getId());
-            long dropped = attempts - completed;
-            if (dropped > 0) {
-                languageRepository.findById(lesson.getLanguageId()).ifPresent(lang -> {
-                    dropOff.put(lang.getName() + " - " + lesson.getTitle(), dropped);
-                });
+            Long lessonId = lesson.getId();
+            if (lessonId != null) {
+                long attempts = userProgressRepository.countAttemptsByLessonId(lessonId);
+                long completed = userProgressRepository.countCompletedByLessonId(lessonId);
+                long dropped = attempts - completed;
+                if (dropped > 0) {
+                    Long langId = lesson.getLanguageId();
+                    if (langId != null) {
+                        languageRepository.findById(langId).ifPresent(lang -> {
+                            dropOff.put(lang.getName() + " - " + lesson.getTitle(), dropped);
+                        });
+                    }
+                }
             }
         }
 

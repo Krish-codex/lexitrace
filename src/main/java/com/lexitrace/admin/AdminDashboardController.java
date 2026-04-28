@@ -15,7 +15,6 @@ public class AdminDashboardController {
     @Autowired private UserService userService;
     @Autowired private LessonService lessonService;
     @Autowired private AnalyticsService analyticsService;
-    @Autowired private LanguageService languageService;
 
     @GetMapping("/dashboard")
     public String dashboard(Authentication auth, Model model) {
