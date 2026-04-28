@@ -58,7 +58,7 @@ cd LexiTrace
 mvn spring-boot:run
 ```
 
-The application will be available at: **[http://localhost:8080](http://localhost:8080)**
+The application will be available at: **[http://localhost:9090](http://localhost:9090)**
 
 ---
 
