@@ -11,10 +11,12 @@
     <div class="main-content">
         <div class="exercise-container">
             <div class="card text-center mb-24" style="padding:40px;">
-                <h1 style="margin-bottom:8px;">🎉 Lesson Complete!</h1>
+                <h1 th:if="${passed}" style="margin-bottom:8px;">🎉 Lesson Complete!</h1>
+                <h1 th:unless="${passed}" style="margin-bottom:8px;color:var(--danger)">💪 Keep Practicing!</h1>
                 <p class="text-muted" th:text="${lesson.title}">Lesson</p>
-                <div class="result-score" th:text="${totalScore}" style="margin:20px 0;">0</div>
-                <p>XP Earned</p>
+                <div class="result-score" th:text="${totalScore}" th:style="${passed} ? 'margin:20px 0;' : 'margin:20px 0;color:var(--danger)'">0</div>
+                <p th:if="${passed}">XP Earned</p>
+                <p th:unless="${passed}">Points Scored (Need 60% to pass)</p>
                 <div style="display:flex;justify-content:center;gap:32px;margin-top:24px;">
                     <div>
                         <div style="font-size:1.5rem;font-weight:700;" th:text="${correctCount} + '/' + ${totalExercises}">0/0</div>
@@ -46,7 +48,8 @@
 
             <div style="display:flex;gap:12px;margin-top:24px;">
                 <a th:href="@{/user/lessons/{id}(id=${language?.id})}" class="btn btn-outline">← Back to Lessons</a>
-                <a th:href="@{/user/dashboard}" class="btn btn-primary">Dashboard</a>
+                <a th:unless="${passed}" th:href="@{/user/exercise/{id}(id=${lesson.id})}" class="btn btn-primary">Retry Lesson ↺</a>
+                <a th:if="${passed}" th:href="@{/user/dashboard}" class="btn btn-primary">Dashboard</a>
             </div>
         </div>
     </div>

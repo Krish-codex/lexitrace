@@ -20,7 +20,6 @@ public class UserLessonController {
     @Autowired private LanguageService languageService;
     @Autowired private LessonService lessonService;
     @Autowired private NotificationService notificationService;
-    @Autowired private AnalyticsService analyticsService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -157,13 +156,20 @@ public class UserLessonController {
             timeSpent = (int)((System.currentTimeMillis() - startTime) / 1000);
         }
 
-        // Save progress
-        lessonService.completeLesson(user.getId(), lessonId, totalScore, timeSpent);
-        userService.updateStreak(user.getId());
+        int totalPossiblePoints = exercises.stream().mapToInt(Exercise::getPoints).sum();
+        boolean passed = totalPossiblePoints > 0 && ((double) totalScore / totalPossiblePoints) >= 0.6;
 
-        // Notify
-        notificationService.createNotification(user.getId(),
-                "Lesson completed! You earned " + totalScore + " XP 🎉");
+        // Save progress
+        lessonService.completeLesson(user.getId(), lessonId, totalScore, totalPossiblePoints, timeSpent);
+        
+        if (passed) {
+            userService.updateStreak(user.getId());
+            notificationService.createNotification(user.getId(),
+                    "Lesson completed! You earned " + totalScore + " XP 🎉");
+        } else {
+            notificationService.createNotification(user.getId(),
+                    "Lesson finished, but you need at least 60% to unlock the next one. Try again! 💪");
+        }
 
         Language language = lesson != null ? languageService.findById(lesson.getLanguageId()).orElse(null) : null;
 
@@ -173,6 +179,8 @@ public class UserLessonController {
         model.addAttribute("language", language);
         model.addAttribute("results", results);
         model.addAttribute("totalScore", totalScore);
+        model.addAttribute("totalPossiblePoints", totalPossiblePoints);
+        model.addAttribute("passed", passed);
         model.addAttribute("correctCount", correctCount);
         model.addAttribute("totalExercises", exercises.size());
         model.addAttribute("timeSpent", timeSpent);

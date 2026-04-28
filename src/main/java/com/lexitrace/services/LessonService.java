@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings("null")
 public class LessonService {
 
     @Autowired
@@ -89,7 +90,7 @@ public class LessonService {
                 .orElse(false);
     }
 
-    public UserProgress completeLesson(Long userId, Long lessonId, int score, int timeSpentSeconds) {
+    public UserProgress completeLesson(Long userId, Long lessonId, int score, int totalPossiblePoints, int timeSpentSeconds) {
         UserProgress progress = userProgressRepository.findByUserIdAndLessonId(userId, lessonId)
                 .orElseGet(() -> {
                     UserProgress p = new UserProgress();
@@ -98,8 +99,18 @@ public class LessonService {
                     return p;
                 });
 
-        progress.setCompleted(true);
-        progress.setScore(score);
+        // Only mark as completed if they got at least 60% of the points
+        boolean isPass = totalPossiblePoints > 0 && ((double) score / totalPossiblePoints) >= 0.6;
+        
+        if (isPass) {
+            progress.setCompleted(true);
+        }
+        
+        // Update score only if it's better than previous or it's the first attempt
+        if (score > progress.getScore()) {
+            progress.setScore(score);
+        }
+        
         progress.setTimeSpentSeconds(timeSpentSeconds);
         progress.setCompletedAt(LocalDateTime.now());
         return userProgressRepository.save(progress);
